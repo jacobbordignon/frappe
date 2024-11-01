@@ -106,7 +106,7 @@ class User(Document):
 		last_name: DF.Data | None
 		last_password_reset_date: DF.Date | None
 		last_reset_password_key_generated_on: DF.Datetime | None
-		linkedin: DF.Data | None
+		linkedin_1: DF.Data | None
 		list_sidebar: DF.Check
 		location: DF.Data | None
 		login_after: DF.Int
