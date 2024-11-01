@@ -20,7 +20,7 @@
   "major",
   "concentration",
   "section_break_socials",
-  "linkedin",
+  "linkedin_1",
   "instagram",
   "crunchbase",
   "user_website",
@@ -868,7 +868,7 @@
    "label": "Concentration"
   },
   {
-   "fieldname": "linkedin",
+   "fieldname": "linkedin_1",
    "fieldtype": "Data",
    "label": "LinkedIn"
   },
