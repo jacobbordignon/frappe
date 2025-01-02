@@ -15,6 +15,7 @@
   "cb1",
   "published",
   "module",
+  "icon",
   "sb1",
   "content_type",
   "slideshow",
@@ -330,6 +331,11 @@
   {
    "fieldname": "column_break_30",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "icon",
+   "fieldtype": "Data",
+   "label": "Icon"
   }
  ],
  "has_web_view": 1,
@@ -339,7 +345,7 @@
  "is_published_field": "published",
  "links": [],
  "make_attachments_public": 1,
- "modified": "2024-04-12 10:30:49.022735",
+ "modified": "2025-01-02 02:41:03.309153",
  "modified_by": "Administrator",
  "module": "Website",
  "name": "Web Page",

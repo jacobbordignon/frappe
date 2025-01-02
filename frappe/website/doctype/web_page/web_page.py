@@ -44,6 +44,7 @@ class WebPage(WebsiteGenerator):
 		end_date: DF.Datetime | None
 		full_width: DF.Check
 		header: DF.HTMLEditor | None
+		icon: DF.Data | None
 		idx: DF.Int
 		insert_style: DF.Check
 		javascript: DF.Code | None
