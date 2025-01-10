@@ -35,44 +35,28 @@ login.bind_events = function () {
 		args.email = ($("#signup_email").val() || "").trim();
 		args.redirect_to = frappe.utils.sanitise_redirect(frappe.utils.get_url_arg("redirect-to"));
 		args.full_name = frappe.utils.xss_sanitise(($("#signup_fullname").val() || "").trim());
-		
-		// Get password values
-		args.password = $("#signup_password").val();
-		var confirmPassword = $("#signup_password_confirm").val();
-		
-		// Get education details
 		args.university = $("#signup_university").val();
 		args.major = ($("#signup_major").val() || "").trim();
-	
+
 		if (!args.email || !validate_email(args.email) || !args.full_name) {
 			login.set_status({{ _("Valid email and name required") | tojson }}, 'red');
 			return false;
 		}
-	
-		if (!args.password || !confirmPassword) {
-			login.set_status({{ _("Please enter and confirm your password") | tojson }}, 'red');
-			return false;
-		}
-	
-		if (args.password !== confirmPassword) {
-			login.set_status({{ _("Passwords do not match") | tojson }}, 'red');
-			return false;
-		}
-	
+
 		if (!args.university) {
 			login.set_status({{ _("Please select your university") | tojson }}, 'red');
 			return false;
 		}
-	
+
 		if (!args.major) {
 			login.set_status({{ _("Please enter your major") | tojson }}, 'red');
 			return false;
 		}
-	
+
 		login.call(args);
 		return false;
 	});
-	
+
 	$(".form-forgot").on("submit", function (event) {
 		event.preventDefault();
 		var args = {};
@@ -131,7 +115,6 @@ login.bind_events = function () {
 	});
 	{% endif %}
 }
-
 
 login.route = function () {
 	var route = window.location.hash.slice(1);
