@@ -1053,23 +1053,40 @@ def sign_up(email: str, full_name: str, redirect_to: str, university: str = None
             "user_type": "Website User",
         })
         
+        # Prevent modification timestamp conflicts
         user.flags.ignore_permissions = True
         user.flags.ignore_password_policy = True
-        user.insert()
+        user.flags.no_welcome_mail = True  # We'll send it after saving
+        
+        # Disable document timestamp updates
+        user.flags.ignore_timestamps = True
+        user.flags.in_insert = True
+        
+        # Insert the user
+        user.insert(ignore_permissions=True)
+
+        # Set any additional fields without triggering timestamp updates
+        if university:
+            frappe.db.set_value("User", user.name, "university", university, update_modified=False)
+        if major:
+            frappe.db.set_value("User", user.name, "major", major, update_modified=False)
 
         # set default signup role as per Portal Settings
         default_role = frappe.db.get_single_value("Portal Settings", "default_role")
         if default_role:
             user.add_roles(default_role)
 
+        # Handle redirect
         if redirect_to:
             frappe.cache.hset("redirect_after_login", user.name, redirect_to)
 
+        # Send welcome email
+        user.send_welcome_mail_to_user()
+        
         if user.flags.email_sent:
             return 1, _("Please check your email for verification")
         else:
             return 2, _("Please ask your administrator to verify your sign-up")
-
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=get_password_reset_limit, seconds=60 * 60)
