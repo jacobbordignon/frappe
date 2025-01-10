@@ -10,6 +10,30 @@
             <input type="email" id="signup_email" class="form-control"
                 placeholder="{{ _('jane@example.com') }}" required autocomplete="username">
         </div>
+        <div class="form-group">
+            <label class="form-label sr-only" for="signup_password">{{ _("Password") }}</label>
+            <input type="password" id="signup_password" class="form-control"
+                placeholder="{{ _('Password') }}" required>
+        </div>
+        <div class="form-group">
+            <label class="form-label sr-only" for="signup_password_confirm">{{ _("Confirm Password") }}</label>
+            <input type="password" id="signup_password_confirm" class="form-control"
+                placeholder="{{ _('Confirm Password') }}" required>
+        </div>
+        <div class="form-group">
+            <label class="form-label sr-only" for="signup_university">{{ _("University") }}</label>
+            <select id="signup_university" name="university" class="form-control" required>
+                <option value="">{{ _('Select University') }}</option>
+                {% for university in frappe.get_meta("User").get_field("university").options.split("\n") %}
+                    <option value="{{ university }}">{{ university }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label sr-only" for="signup_major">{{ _("Major") }}</label>
+            <input type="text" id="signup_major" name="major" class="form-control"
+                placeholder="{{ _('Your Major') }}" required>
+        </div>
     </div>
     <div class="page-card-actions">
         <button class="btn btn-sm btn-primary btn-block btn-signup"
