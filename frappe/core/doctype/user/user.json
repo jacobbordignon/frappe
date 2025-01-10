@@ -166,11 +166,13 @@
   },
   {
    "bold": 1,
+   "default": "NA",
    "fieldname": "last_name",
    "fieldtype": "Data",
    "label": "Last Name",
    "oldfieldname": "last_name",
-   "oldfieldtype": "Data"
+   "oldfieldtype": "Data",
+   "reqd": 1
   },
   {
    "fieldname": "full_name",
@@ -965,7 +967,7 @@
    "link_fieldname": "user"
   }
  ],
- "modified": "2024-10-31 21:45:03.776608",
+ "modified": "2025-01-10 03:42:58.420876",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",

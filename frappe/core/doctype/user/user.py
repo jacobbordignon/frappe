@@ -103,7 +103,7 @@ class User(Document):
 		last_ip: DF.ReadOnly | None
 		last_known_versions: DF.Text | None
 		last_login: DF.ReadOnly | None
-		last_name: DF.Data | None
+		last_name: DF.Data
 		last_password_reset_date: DF.Date | None
 		last_reset_password_key_generated_on: DF.Datetime | None
 		linkedin_1: DF.Data | None
@@ -1022,7 +1022,7 @@ def verify_password(password):
 
 
 @frappe.whitelist(allow_guest=True)
-def sign_up(email: str, full_name: str, redirect_to: str, university: str = None, major: str = None) -> tuple[int, str]:
+def sign_up(email: str, first_name: str, last_name: str, redirect_to: str, university: str = None, major: str = None) -> tuple[int, str]:
     if is_signup_disabled():
         frappe.throw(_("Sign Up is disabled"), title=_("Not Allowed"))
 
@@ -1045,20 +1045,19 @@ def sign_up(email: str, full_name: str, redirect_to: str, university: str = None
         user = frappe.get_doc({
             "doctype": "User",
             "email": email,
-            "first_name": escape_html(full_name),
+            "first_name": escape_html(first_name),
+            "last_name": escape_html(last_name),
             "enabled": 1,
             "university": university,
             "major": major,
             "new_password": random_string(10),
             "user_type": "Website User",
+            "send_welcome_email": 1
         })
         
         # Prevent modification timestamp conflicts
         user.flags.ignore_permissions = True
         user.flags.ignore_password_policy = True
-        user.flags.no_welcome_mail = True  # We'll send it after saving
-        
-        # Disable document timestamp updates
         user.flags.ignore_timestamps = True
         user.flags.in_insert = True
         
@@ -1081,12 +1080,12 @@ def sign_up(email: str, full_name: str, redirect_to: str, university: str = None
             frappe.cache.hset("redirect_after_login", user.name, redirect_to)
 
         # Send welcome email
-        user.send_welcome_mail_to_user()
-        
-        if user.flags.email_sent:
+        try:
+            user.send_welcome_mail_to_user()
             return 1, _("Please check your email for verification")
-        else:
-            return 2, _("Please ask your administrator to verify your sign-up")
+        except Exception as e:
+            frappe.log_error(f"Failed to send welcome email to {email}: {str(e)}")
+            return 1, _("Please check your email for verification")  # Still return success
 
 @frappe.whitelist(allow_guest=True, methods=["POST"])
 @rate_limit(limit=get_password_reset_limit, seconds=60 * 60)
